@@ -63,7 +63,7 @@
     <title>Raw User-Content URL Generator</title>
 </head>
 
-<body class="text-white min-h-screen">
+<body class="text-white min-h-screen flex flex-col">
     <nav class="p-4 fixed w-full top-0 z-50 animate-fade">
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <h1 class="text-xl font-semibold text-blue-100">GitHub Raw_userContent URL Generator</h1>
@@ -78,7 +78,7 @@
         </div>
     </nav>
 
-    <main class="max-w-3xl mx-auto pt-24 px-4">
+    <main class="flex-grow max-w-3xl mx-auto pt-24 px-4">
         <div class="main-container p-6 rounded-lg animate-fade hover-scale">
             <p class="text-gray-400 mb-6">Enter the details to generate the raw file URL and commands.</p>
 
@@ -186,6 +186,10 @@
             </div>
         </details>
     </main>
+
+    <footer class="mt-auto text-center text-gray-500">
+        <a href="mailto:bharadwajreddy1406@gmail.com" class="hover:underline">made by Bharadwaj reddy</a>
+    </footer>
 
     <script>
         function generateURL() {
