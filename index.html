@@ -132,6 +132,22 @@
                 </p>
                 <code id="wget" class="block bg-gray-800 p-2 rounded text-green-300"
                     style="font-family: Consolas, monospace;"></code>
+                <p class="font-bold mt-2" id="scriptLabel" style="display:none">
+                    If you want to execute the script:
+                    <button onclick="copyCommand('script')" class="bg-gray-700 ml-2 p-2 rounded" aria-label="Copy">
+                        <svg aria-hidden="true" height="16" viewBox="0 0 16 16" width="16"
+                            class="fill-current">
+                            <path d="M0 1.75A.75.75 0 01.75 1h9.5a.75.75 0 01.75.75v3.836a.75.75 0 01-1.5
+                                    0V2.5H1.5v9h2.836a.75.75 0 010 1.5H.75A.75.75 0 010
+                                    12.25v-10.5zM2.75 4.75A.75.75 0 013.5
+                                    4h9.75A.75.75 0 0114 4.75v9.5a.75.75
+                                    0 01-.75.75H3.5a.75.75 0 01-.75-.75v-9.5zM4.5
+                                    5.5v8h8v-8h-8z"></path>
+                        </svg>
+                    </button>
+                </p>
+                <code id="script" class="block bg-gray-800 p-2 rounded text-green-300"
+                    style="font-family: Consolas, monospace;"></code>
             </div>
         </div>
 
@@ -189,6 +205,11 @@
             document.getElementById('wget').innerText = `wget ${url}`;
 
             document.getElementById('output').classList.remove('hidden');
+
+            if (filepath.endsWith('.sh')) {
+                document.getElementById('scriptLabel').style.display = 'block';
+                document.getElementById('script').innerText = `curl -sSL ${url} | bash`;
+            }
 
             // Store recent inputs
             const rawData = { username, repo, branch, filepath };
