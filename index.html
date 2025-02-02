@@ -83,13 +83,13 @@
             <p class="text-gray-400 mb-6">Enter the details to generate the raw file URL and commands.</p>
 
             <div class="space-y-4">
-                <input id="username" type="text" placeholder="GitHub Username"
+                <input id="username" type="text" placeholder="GitHub Username" oninput="showSuggestions(event, 'username')"
                     class="w-full p-3 bg-slate-800/90 text-black rounded border-0 focus:ring-2 focus:ring-blue-500 transition-all">
-                <input id="repo" type="text" placeholder="Repository Name"
+                <input id="repo" type="text" placeholder="Repository Name" oninput="showSuggestions(event, 'repo')"
                     class="w-full p-3 bg-slate-800/90 text-black rounded border-0 focus:ring-2 focus:ring-blue-500 transition-all">
-                <input id="branch" type="text" placeholder="Branch Name (e.g., main)"
+                <input id="branch" type="text" placeholder="Branch Name (e.g., main)" oninput="showSuggestions(event, 'branch')"
                     class="w-full p-3 bg-slate-800/90 text-black rounded border-0 focus:ring-2 focus:ring-blue-500 transition-all">
-                <input id="filepath" type="text" placeholder="Path to File (e.g., folder/file.txt)"
+                <input id="filepath" type="text" placeholder="Path to File (e.g., folder/file.txt)" oninput="showSuggestions(event, 'filepath')"
                     class="w-full p-3 bg-slate-800/90 text-black rounded border-0 focus:ring-2 focus:ring-blue-500 transition-all">
                 <small class="text-gray-300">For nested folders, use something like folder/subfolder/file.txt</small>
 
@@ -189,6 +189,25 @@
             document.getElementById('wget').innerText = `wget ${url}`;
 
             document.getElementById('output').classList.remove('hidden');
+
+            // Store recent inputs
+            const rawData = { username, repo, branch, filepath };
+            let stored = JSON.parse(localStorage.getItem('recentInputs')) || [];
+            if (stored.length >= 5) stored.shift();
+            stored.push(rawData);
+            localStorage.setItem('recentInputs', JSON.stringify(stored));
+        }
+
+        function showSuggestions(e, field) {
+            const val = e.target.value.toLowerCase();
+            const stored = JSON.parse(localStorage.getItem('recentInputs')) || [];
+            // Filter and suggest
+            const suggestions = stored
+                .map(item => item[field])
+                .filter(item => item.toLowerCase().includes(val))
+                .slice(-5);
+            // (Minimal hint) Display these suggestions as desired (e.g., console.log)
+            console.log(`Suggestions for ${field}:`, suggestions);
         }
 
         function copyCommand(id) {
