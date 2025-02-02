@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'Century Gothic';
+            src: local('Century Gothic');
+        }
+        * { 
+            font-family: 'Century Gothic', sans-serif; 
+            letter-spacing: 0.02em;
+        }
+        .animate-fade { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .hover-scale { transition: transform 0.2s; }
+        .hover-scale:hover { transform: scale(1.02); }
+        body { background-color: #020617; }
+        nav { background-color: #020617; border-bottom: 1px solid #1e293b; }
+        .main-container { background-color: rgba(2, 6, 23, 0.8); }
+        .details-container { background-color: rgba(2, 6, 23, 0.8); }
+        .code-block { background-color: rgba(2, 6, 23, 0.9); }
+    </style>
+    <title>Raw User-Content URL Generator</title>
+</head>
+
+<body class="text-white min-h-screen">
+    <nav class="p-4 fixed w-full top-0 z-50 animate-fade">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-semibold text-blue-100">GitHub Raw_userContent URL Generator</h1>
+            <a href="https://github.com/Bharadwajreddy1406/Github-Raw_userContent_URL_maker.git" 
+               target="_blank"
+               class="text-gray-300 hover:text-white transition-colors">
+                <svg height="32" width="32" viewBox="0 0 16 16" class="fill-current">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                </svg>
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-2xl mx-auto pt-24 px-4">
+        <div class="main-container p-6 rounded-lg animate-fade hover-scale">
+            <p class="text-gray-400 mb-6">Enter the details to generate the raw file URL and commands.</p>
+
+            <div class="space-y-4">
+                <input id="username" type="text" placeholder="GitHub Username" 
+                       class="w-full p-3 bg-slate-800/90 text-black rounded border-0 focus:ring-2 focus:ring-blue-500 transition-all">
+                <input id="repo" type="text" placeholder="Repository Name" 
+                       class="w-full p-3 bg-slate-800/90 text-black rounded border-0 focus:ring-2 focus:ring-blue-500 transition-all">
+                <input id="branch" type="text" placeholder="Branch Name (e.g., main)" 
+                       class="w-full p-3 bg-slate-800/90 text-black rounded border-0 focus:ring-2 focus:ring-blue-500 transition-all">
+                <input id="filepath" type="text" placeholder="Path to File (e.g., folder/file.txt)" 
+                       class="w-full p-3 bg-slate-800/90 text-black rounded border-0 focus:ring-2 focus:ring-blue-500 transition-all">
+                
+                <button onclick="generateURL()" 
+                        class="w-full bg-blue-600 hover:bg-blue-700 p-3 rounded font-medium transition-all duration-200 transform hover:scale-[1.02]">
+                    Generate URL
+                </button>
+            </div>
+
+            <div id="output" class="mt-6 p-4 bg-slate-800 rounded hidden animate-fade">
+                <p class="font-bold">Generated URL:</p>
+                <p id="url" class="text-blue-300 break-all"></p>
+                <p class="font-bold mt-2">cURL Command:</p>
+                <code id="curl" class="block bg-gray-800 p-2 rounded text-green-300"></code>
+                <p class="font-bold mt-2">wget Command:</p>
+                <code id="wget" class="block bg-gray-800 p-2 rounded text-green-300"></code>
+            </div>
+        </div>
+
+        <details class="mt-6 details-container p-6 rounded-lg animate-fade hover-scale">
+            <summary class="text-lg font-bold text-white cursor-pointer mb-4 outline-none">How the URL is Structured</summary>
+            <div class="space-y-4">
+                <p class="text-gray-200">The URL follows this pattern:</p>
+                <code class="code-block p-3 rounded-md text-sm overflow-x-auto whitespace-nowrap">
+                    https://raw.githubusercontent.com/{username}/{repository}/{branch}/{path-to-file}
+                </code>
+                <ul class="space-y-2 text-gray-200 list-inside">
+                    <li class="flex items-start">
+                        <span class="font-semibold min-w-[120px] inline-block">{username}:</span>
+                        <span>GitHub username or organization name</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="font-semibold min-w-[120px] inline-block">{repository}:</span>
+                        <span>The repository name</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="font-semibold min-w-[120px] inline-block">{branch}:</span>
+                        <span>The branch (e.g., main, master, dev)</span>
+                    </li>
+                    <li class="flex items-start">
+                        <span class="font-semibold min-w-[120px] inline-block">{path-to-file}:</span>
+                        <span>File path inside the repository</span>
+                    </li>
+                </ul>
+                <div class="mt-4">
+                    <p class="text-gray-200 mb-2">Example:</p>
+                    <code class="code-block p-3 rounded-md text-sm overflow-x-auto whitespace-nowrap">
+                        https://raw.githubusercontent.com/octocat/Hello-World/main/README.md
+                    </code>
+                </div>
+            </div>
+        </details>
+    </main>
+
+    <script>
+        function generateURL() {
+            const username = document.getElementById('username').value.trim();
+            const repo = document.getElementById('repo').value.trim();
+            const branch = document.getElementById('branch').value.trim();
+            const filepath = document.getElementById('filepath').value.trim();
+            
+            if (!username || !repo || !branch || !filepath) {
+                alert('Please fill in all fields!');
+                return;
+            }
+            
+            const url = `https://raw.githubusercontent.com/${username}/${repo}/${branch}/${filepath}`;
+            document.getElementById('url').innerText = url;
+            document.getElementById('curl').innerText = `curl -O ${url}`;
+            document.getElementById('wget').innerText = `wget ${url}`;
+            
+            document.getElementById('output').classList.remove('hidden');
+        }
+    </script>
+</body>
+
+</html>
